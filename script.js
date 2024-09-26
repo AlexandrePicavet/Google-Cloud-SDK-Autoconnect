@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Google Cloud SDK Autoconnect
 // @description  Auto connect to your gcloud account when using 'gcloud auth login' command
-// @version      1.0.0
+// @version      1.1.0
 // @author       Alexandre Picavet (https://github.com/AlexandrePicavet)
 // @namespace    https://github.com/AlexandrePicavet/Google-Cloud-SDK-Autoconnect
 // @supportURL   https://github.com/AlexandrePicavet/Google-Cloud-SDK-Autoconnect/issues
@@ -11,6 +11,7 @@
 // @match        https://accounts.google.com/signin/oauth/consent*
 // @match        https://sdk.cloud.google.com/authcode.html*
 // @grant        GM_setClipboard
+// @grant        GM_notification
 // @grant        window.close
 // ==/UserScript==
 
@@ -82,5 +83,12 @@
 		)
 			.then((element) => element?.textContent?.trim())
 			.then((code) => GM_setClipboard(code, "text"))
+			.then(
+				() => GM_notification({
+					tag: 'google-sdk-autoconnect',
+					title: 'Google SDK Autoconnect',
+					text: 'Google SDK auth-code copied to clipboard.'
+				})
+			)
 			.then(window.close);
 })();
